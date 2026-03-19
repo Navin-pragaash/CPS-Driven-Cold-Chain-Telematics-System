@@ -7,10 +7,8 @@ Using an ESP32-S3 and thermoelectric cooling (Peltier module), the system ensure
 ---
 
 ## 🎯 Objectives  
-- Design a reliable embedded system for cold chain temperature control  
-- Implement real-time data acquisition and feedback control  
-- Ensure efficient hardware–software co-design  
-- Maintain stable low-temperature conditions for sensitive storage  
+- Design a reliable embedded system for cold chain temperature monitoring and feedback control.  
+- Maintain stable low-temperature conditions for sensitive storage.
 
 ---
 
@@ -18,7 +16,7 @@ Using an ESP32-S3 and thermoelectric cooling (Peltier module), the system ensure
 
 **Hardware:**  
 - Microcontroller: ESP32-S3  
-- Sensors/Modules: Temperature Sensor, Peltier Module, Heat Sink + Fan  
+- Sensors/Modules: TMP102 Sensor, Peltier Module, Heat Sink + Fan, power supply system, NEO-6M.
 
 **Software:**  
 - IDE: Arduino IDE  
@@ -31,25 +29,17 @@ Using an ESP32-S3 and thermoelectric cooling (Peltier module), the system ensure
 The system continuously monitors temperature using sensors and dynamically controls the Peltier module to maintain the desired cooling range.
 
 **Flow:**  
-Temperature Sensor → ESP32-S3 → Control Algorithm → Peltier module and relay → Cooling Output → Cloud Monitoring  
+Temperature Sensor and GPS data → ESP32-S3 → Control Algorithm → Peltier module and relay → Cooling Output → Cloud Monitoring  
 
 ![Architecture](images/architecture.png)
 
 ---
 
 ## 🚀 Features  
-- Real-time temperature monitoring  
+- Real-time temperature, location monitoring  
 - Closed-loop temperature control using feedback  
 - Multi-factor authentication (MFA) based cloud monitoring  
 - Reliable and scalable embedded design  
-
----
-
-## ▶️ Usage  
-- Power the system  
-- Monitor real-time temperature readings  
-- Observe cooling response via Peltier module  
-- Access cloud dashboard for remote monitoring  
 
 ---
 
@@ -81,7 +71,7 @@ This project was collaboratively developed by:
 
 This work has been presented as a research paper and is currently under review for publication.
 
-**Paper Title:** *"Industrial Cold Chain Monitoring using ESP32-S3 with Thermoelectric Cooling"*  
+**Paper Title:** *"Industrial Cold Chain: A Tracking System With Temperature Maintenance "*  
 **Status:** Under Review / Submitted  
 **Conference/Journal:** To be submitted  
 
