@@ -1,9 +1,13 @@
 # CPS-Driven-Cold-Chain-Telematics-System   
 
 
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![ESP32-S3](https://img.shields.io/badge/Hardware-ESP32-S3-red)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+![ESP32-S3](https://img.shields.io/badge/Hardware-ESP32--S3-red)
+![Arduino](https://img.shields.io/badge/Firmware-Arduino-green)
+![ThingSpeak](https://img.shields.io/badge/Cloud-ThingSpeak-yellow)
+![GPS](https://img.shields.io/badge/Tracking-GPS-green)
+![Flask](https://img.shields.io/badge/Backend-Flask-black)
+![CPS](https://img.shields.io/badge/System-CPS-critical)
+![Telematics](https://img.shields.io/badge/System-Telematics-informational)
 
 # Project Overview  
 This project implements a real-time Cyber physical system to monitor and maintain temperature conditions in industrial cold chain environments.  
@@ -21,7 +25,7 @@ Using an ESP32-S3 and thermoelectric cooling (Peltier module), the system ensure
 
 **Hardware:**  
 - Microcontroller: ESP32-S3  
-- Sensors/Modules: TMP102 Sensor, Peltier Module, Heat Sink + Fan, power supply system, NEO-6M, 15cmx15cmx20cm Thermocol setup.
+- Sensors/Modules: TMP102 Sensor, (Peltier Module + Heat Sink + Fan), (2V, 6A) Power Source, NEO-6M, (15cmx15cmx20cm) Box setup.
 
 **Software:**  
 - IDE: Arduino IDE  
@@ -29,14 +33,14 @@ Using an ESP32-S3 and thermoelectric cooling (Peltier module), the system ensure
 
 ---
 
-# Embedded Control Module (ESP32)
+# Embedded Control Module (ESP32-S3)
 
 Responsible for:
 
--Sensor data acquisition (temperature & geolocation)
--Closed-loop thermal control using Peltier-based actuation
--Cloud telemetry integration for real-time monitoring
--Local web server for dynamic threshold configuration
+- Sensor data acquisition (temperature & geolocation)
+- Closed-loop thermal control using Peltier-based actuation
+- Cloud telemetry integration for real-time monitoring
+- Local web server for dynamic threshold configuration
 
 --
 
