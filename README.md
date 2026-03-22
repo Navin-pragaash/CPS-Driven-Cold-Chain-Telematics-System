@@ -11,7 +11,7 @@
 
 # Project Overview  
 This project implements a real-time Cyber physical system to monitor and maintain temperature conditions in industrial cold chain environments.  
-Using an ESP32-S3 and thermoelectric cooling (Peltier module), the system ensures reliable temperature regulation with continuous feedback and cloud-based monitoring.
+Using an ESP32-S3 and thermoelectric cooler (Peltier module), the system ensures reliable temperature regulation with continuous feedback and cloud-based monitoring.
 
 ---
 
