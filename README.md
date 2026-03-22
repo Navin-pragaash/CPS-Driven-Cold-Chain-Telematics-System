@@ -25,7 +25,7 @@ Using an ESP32-S3 and thermoelectric cooler (Peltier module), the system ensures
 
 **Hardware:**  
 - Microcontroller: ESP32-S3  
-- Sensors/Modules: TMP102 Sensor, (Peltier Module + Heat Sink + Fan), (2V, 6A) Power Source, NEO-6M, (15cmx15cmx20cm) Box setup.
+- Sensors/Modules: TMP102 Sensor, (Peltier Module + Heat Sink + Fan), (12V, 6A) Power Source, NEO-6M, (15cm x 15cm x 20cm) Box setup.
 
 **Software:**  
 - IDE: Arduino IDE  
