@@ -114,7 +114,7 @@ User / Operator
 This project was collaboratively developed by:  
 - **Navin Pragaash G**  
 - **Vignesh R**  
-- **Badma Priya**  
+- **Badmasivapriya V**  
 
 ---
 
