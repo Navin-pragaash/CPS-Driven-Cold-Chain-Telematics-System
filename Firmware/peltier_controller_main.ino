@@ -132,14 +132,14 @@ void loop() {
   const long readInterval = 5000;    // Read every 5 sec
   const long uploadInterval = 15000; // Upload every 15 sec (ThingSpeak limit)
 
-  unsigned long currentMillis = millis();
+  unsigned long currentTimeMillis = millis();
   digitalWrite(14,HIGH);
  // digitalWrite(13,HIGH);
  // digitalWrite(12,HIGH);
  // digitalWrite(11,HIGH);
   // Read sensors periodically
-  if (currentMillis - lastReadTime >= readInterval) {
-    lastReadTime = currentMillis;
+  if (currentTimeMillis - lastReadTime >= readInterval) {
+    lastReadTime = currentTimeMillis;
     
     // Read temperature and control Peltier
     readTemperature();
@@ -149,8 +149,8 @@ void loop() {
   }
 
   // Upload to ThingSpeak periodically
-  if (currentMillis - lastUploadTime >= uploadInterval) {
-    lastUploadTime = currentMillis;
+  if (currentTimeMillis - lastUploadTime >= uploadInterval) {
+    lastUploadTime = currentTimeMillis;
     uploadToThingSpeak();
   }
 
@@ -224,38 +224,38 @@ void uploadToThingSpeak() {
     ThingSpeak.setField(3, latitude);
     ThingSpeak.setField(4, longitude);
 
-    int result = ThingSpeak.writeFields(channelID, apiKey);
+    int httpStatusCode = ThingSpeak.writeFields(channelID, apiKey);
 
-    if (result == 200) {
+    if (httpStatusCode == 200) {
       Serial.println("Data uploaded to ThingSpeak successfully.");
     } else {
-      Serial.println("ThingSpeak upload failed. HTTP error: " + String(result));
+      Serial.println("ThingSpeak upload failed. HTTP error: " + String(httpStatusCode));
     }
   } else {
     Serial.println("WiFi not connected. Cannot upload to ThingSpeak.");
   }
 }
 
-bool isValidTemperature(float temp) {
-  return (temp > -50.0 && temp < 150.0);  // Reasonable range for most applications
+bool isValidTemperature(float temperatureCelsius) {
+  return (temperatureCelsius > -50.0 && temperatureCelsius < 150.0);  // Reasonable range for most applications
 }
 
-void checkTemperatureAlert(float temp) {
+void checkTemperatureAlert(float temperatureCelsius) {
   if (!emailAlertsEnabled) return;
 
   unsigned long currentTime = millis();
-  bool isAboveThreshold = (temp > tempThreshold);
-  bool isBelowLowThreshold = (temp <= LOW_TEMP_THRESHOLD);
+  bool isAboveThreshold = (temperatureCelsius > tempThreshold);
+  bool isBelowLowThreshold = (temperatureCelsius <= LOW_TEMP_THRESHOLD);
 
   // Alert when above the threshold
   if (isAboveThreshold && !emailSent) {
     if (currentTime - lastEmailSentTime >= emailCooldown) {
-      String message = "🚨 Temperature ALERT: " + String(temp) + "°C (Above " + String(tempThreshold) + "°C)\n";
-      message += "Peltier Status: " + String(peltierStatus ? "ON" : "OFF") + "\n";
-      message += "GPS Location: " + String(latitude, 6) + ", " + String(longitude, 6);
+      String alertEmailBody = "🚨 Temperature ALERT: " + String(temperatureCelsius) + "°C (Above " + String(tempThreshold) + "°C)\n";
+      alertEmailBody += "Peltier Status: " + String(peltierStatus ? "ON" : "OFF") + "\n";
+      alertEmailBody += "GPS Location: " + String(latitude, 6) + ", " + String(longitude, 6);
       
-      if (sendEmailNotification(message)) {
-        Serial.println("Email sent: " + message);
+      if (sendEmailNotification(alertEmailBody)) {
+        Serial.println("Email sent: " + alertEmailBody);
         emailSent = true;
         lastEmailSentTime = currentTime;
       }
@@ -263,38 +263,38 @@ void checkTemperatureAlert(float temp) {
   }
   // Recovery when below the LOW_TEMP_THRESHOLD
   else if (isBelowLowThreshold && emailSent) {
-    String message = "✅ Temperature back to normal: " + String(temp) + "°C\n";
-    message += "Peltier Status: " + String(peltierStatus ? "ON" : "OFF") + "\n";
-    message += "GPS Location: " + String(latitude, 6) + ", " + String(longitude, 6);
+    String alertEmailBody = "✅ Temperature back to normal: " + String(temperatureCelsius) + "°C\n";
+    alertEmailBody += "Peltier Status: " + String(peltierStatus ? "ON" : "OFF") + "\n";
+    alertEmailBody += "GPS Location: " + String(latitude, 6) + ", " + String(longitude, 6);
     
-    if (sendEmailNotification(message)) {
-      Serial.println("Recovery email sent: " + message);
+    if (sendEmailNotification(alertEmailBody)) {
+      Serial.println("Recovery email sent: " + alertEmailBody);
       emailSent = false;
       lastEmailSentTime = currentTime;
     }
   }
 }
 
-bool sendEmailNotification(String message) {
-  ESP_Mail_Session session;
-  session.server.host_name = smtpServer;
-  session.server.port = smtpServerPort;
-  session.login.email = emailSenderAccount;
-  session.login.password = emailSenderPassword;
+bool sendEmailNotification(String alertEmailBody) {
+  ESP_Mail_Session smtpMailSession;
+  smtpMailSession.server.host_name = smtpServer;
+  smtpMailSession.server.port = smtpServerPort;
+  smtpMailSession.login.email = emailSenderAccount;
+  smtpMailSession.login.password = emailSenderPassword;
 
-  SMTP_Message mail;
-  mail.sender.name = "ESP32-S3 Alert";
-  mail.sender.email = emailSenderAccount;
-  mail.subject = emailSubject;
-  mail.addRecipient("Recipient", recipientEmail);
-  mail.text.content = message.c_str();
+  SMTP_Message emailMessage;
+  emailMessage.sender.name = "ESP32-S3 Alert";
+  emailMessage.sender.email = emailSenderAccount;
+  emailMessage.subject = emailSubject;
+  emailMessage.addRecipient("Recipient", recipientEmail);
+  emailMessage.text.content = alertEmailBody.c_str();
 
-  if (!smtp.connect(&session)) {
+  if (!smtp.connect(&smtpMailSession)) {
     Serial.println("SMTP Connection Error: " + smtp.errorReason());
     return false;
   }
 
-  if (!MailClient.sendMail(&smtp, &mail)) {
+  if (!MailClient.sendMail(&smtp, &emailMessage)) {
     Serial.println("Email Error: " + smtp.errorReason());
     smtp.closeSession();
     return false;
@@ -304,15 +304,15 @@ bool sendEmailNotification(String message) {
   return true;
 }
 
-String processor(const String& var) {
-  if (var == "TEMPERATURE") return String(lastValidTemperature);
-  else if (var == "PELTIER_STATUS") return peltierStatus ? "ON" : "OFF";
-  else if (var == "GPS_DATA") {
+String processor(const String& templateVariable) {
+  if (templateVariable == "TEMPERATURE") return String(lastValidTemperature);
+  else if (templateVariable == "PELTIER_STATUS") return peltierStatus ? "ON" : "OFF";
+  else if (templateVariable == "GPS_DATA") {
     if (latitude == 0.0 && longitude == 0.0) return "No GPS fix";
     return String(latitude, 6) + ", " + String(longitude, 6);
   }
-  else if (var == "EMAIL_INPUT") return recipientEmail;
-  else if (var == "ENABLE_EMAIL") return emailAlertsEnabled ? "checked" : "";
-  else if (var == "THRESHOLD") return String(tempThreshold);
+  else if (templateVariable == "EMAIL_INPUT") return recipientEmail;
+  else if (templateVariable == "ENABLE_EMAIL") return emailAlertsEnabled ? "checked" : "";
+  else if (templateVariable == "THRESHOLD") return String(tempThreshold);
   return String();
 }
