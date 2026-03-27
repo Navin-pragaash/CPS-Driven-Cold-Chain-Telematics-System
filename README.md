@@ -102,10 +102,9 @@ User / Operator
 ---
 
 # Future Improvements  
-- End-to-end encrypted communication (TLS)  
-- Advanced cloud dashboard with analytics  
 - Power optimization for long-term deployment  
-- AI-based predictive temperature control  
+- AI-based predictive temperature control with native dataset collected from the previos build of product 
+- Schematic redesign for scalability and production 
 
 ---
 
