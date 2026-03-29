@@ -18,13 +18,13 @@ def send_email(recipient_email, subject, message):
         sender_password = "qvfa icvc kgfz cxos"  # Use App Password here
 
         # Create the SMTP session
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()  # Start TLS encryption
-        server.login(sender_email, sender_password)
+        smtp_connection = smtplib.SMTP(smtp_server, smtp_port)
+        smtp_connection.starttls()  # Start TLS encryption
+        smtp_connection.login(sender_email, sender_password)
         #email_message = f"Subject: {subject}\n\n{message}"
         email_message = f"Subject: {subject}\nTo: {recipient_email}\n\n{message}"
-        server.sendmail(sender_email, recipient_email, email_message)
-        server.quit()
+        smtp_connection.sendmail(sender_email, recipient_email, email_message)
+        smtp_connection.quit()
         print(f"OTP sent to {recipient_email}")
     except Exception as e:
         print(f"Error sending email: {e}")
@@ -37,14 +37,14 @@ def index():
 # Route: Generate and Send OTP
 @app.route('/send_otp', methods=['POST'])
 def send_otp():
-    email = request.form['email']  # Get email input from form
-    otp = generate_otp()
-    session['otp'] = otp  # Store OTP in session for verification
+    recipient_email = request.form['email']  # Get email input from form
+    generated_otp = generate_otp()
+    session['otp'] = generated_otp  # Store OTP in session for verification
     subject = "Your OTP Code"
-    message = f"Your OTP is: {otp}. Welcome to Cold chain monitoring!! Please Donot share this OTP with anyone!! "
+    message = f"Your OTP is: {generated_otp}. Welcome to Cold chain monitoring!! Please Donot share this OTP with anyone!! "
 
     # Send OTP email
-    send_email(email, subject, message)
+    send_email(recipient_email, subject, message)
     return '''
         <title>Cold Chain Monitoring - Login</title>
         <h1>Cold Chain Monitoring</h1>
@@ -58,8 +58,8 @@ def send_otp():
 # Route: Verify OTP and Redirect to ThingSpeak
 @app.route('/verify_otp', methods=['POST'])
 def verify_otp():
-    user_otp = request.form['otp']
-    if 'otp' in session and int(user_otp) == session['otp']:
+    submitted_otp = request.form['otp']
+    if 'otp' in session and int(submitted_otp) == session['otp']:
         session.pop('otp')  # Clear OTP from session after successful verification
 
         # Redirect to ThingSpeak URL
