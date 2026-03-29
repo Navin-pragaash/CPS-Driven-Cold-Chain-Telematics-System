@@ -31,7 +31,7 @@ Using an ESP32-S3 and thermoelectric cooler (Peltier module), the system ensures
 - IDE: Arduino IDE  
 - Languages: C 
 
----
+--
 
 # Embedded Control Module (ESP32-S3)
 
