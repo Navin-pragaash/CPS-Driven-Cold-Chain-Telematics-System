@@ -122,11 +122,10 @@ This project was collaboratively developed by:
 This work has been presented as a research paper and is currently under review for publication.
 
 **Paper Title:** *"Industrial Cold Chain: A Tracking System With Temperature Maintenance"*  
-**Status:** Under Review / Submitted  
-**Conference/Journal:** To be submitted  
+**Status:** Published  
+**Conference/Journal:** ICETEG IEEE 2025
 
-*Note: Full paper will be linked once published.*
-
+**Paper link:** https://ieeexplore.ieee.org/document/11472804
 ---
 
 # License  
