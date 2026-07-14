@@ -124,7 +124,6 @@ This work has been presented as a research paper and is currently under review f
 **Paper Title:** *"Industrial Cold Chain: A Tracking System With Temperature Maintenance"*  
 **Status:** Published  
 **Conference/Journal:** ICETEG IEEE 2025
-
 **Paper link:** https://ieeexplore.ieee.org/document/11472804
 ---
 
